@@ -1,5 +1,8 @@
 buildscript {
-    ext.kotlinVersion = '1.0.5-2'
+    ext {
+        kotlinVersion = '1.0.5-2'
+        okHttpVersion = '3.4.2'
+    }
 
     repositories {
         jcenter()

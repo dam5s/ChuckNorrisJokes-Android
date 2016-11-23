@@ -6,9 +6,11 @@
     android:orientation="vertical"
     android:padding="@dimen/spacing"
     >
-    <TextView
-        android:id="@+id/random_joke"
-        android:layout_width="wrap_content"
+
+    <Button
+        android:id="@+id/main_activity_button"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="@string/start_main_activity"
         />
 </LinearLayout>

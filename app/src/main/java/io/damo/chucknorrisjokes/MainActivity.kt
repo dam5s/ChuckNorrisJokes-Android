@@ -1,18 +1,62 @@
 package io.damo.chucknorrisjokes
 
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import kotlinx.android.synthetic.main.main.*
 
 class MainActivity : AppCompatActivity() {
+
+
+    private lateinit var randomJokeFragment: Fragment
+    private lateinit var categoriesFragment: Fragment
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.main)
 
+        randomJokeFragment = RandomJokeFragment()
+        categoriesFragment = CategoriesFragment()
+
         supportFragmentManager
             .beginTransaction()
-            .add(R.id.fragment, RandomJokeFragment(), "random_joke")
+            .add(R.id.fragment, randomJokeFragment)
             .commit()
+
+        bottomNavigation.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.random -> {
+                    navigateToRandom()
+                    true
+                }
+
+                R.id.categories -> {
+                    navigateToCategories()
+                    true
+                }
+
+                else -> false
+            }
+        }
+    }
+
+
+    private fun navigateToCategories() {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragment, categoriesFragment)
+            .commit()
+        setTitle(R.string.categories)
+    }
+
+    private fun navigateToRandom() {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragment, randomJokeFragment)
+            .commit()
+        setTitle(R.string.app_label)
     }
 }
+

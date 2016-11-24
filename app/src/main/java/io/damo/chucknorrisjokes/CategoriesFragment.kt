@@ -14,21 +14,30 @@ import rx.Subscription
 class CategoriesFragment : Fragment() {
 
     private lateinit var subscription: Subscription
+    private lateinit var adapter: CategoriesAdapter
 
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
-        = inflater.inflate(R.layout.categories, container, false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        adapter = CategoriesAdapter(fragmentManager)
         subscription = observe { serviceLocator.api.fetchCategories() }
             .subscribe { result ->
                 when (result) {
-                    is Success ->
-                        addTabs(result.value)
+                    is Success -> {
+                        adapter.categories = addNone(result.value)
+                        setupTabs()
+                    }
                 }
             }
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
+        = inflater.inflate(R.layout.categories, container, false)
+
+    override fun onResume() {
+        super.onResume()
+        setupTabs()
     }
 
     override fun onDestroy() {
@@ -37,15 +46,14 @@ class CategoriesFragment : Fragment() {
     }
 
 
-    private fun addTabs(categories: List<Category>) {
-        categories.forEach { addTab(it.name) }
-        addTab("None")
+    private fun setupTabs() {
+        viewPager.adapter = adapter
+        tabLayout.setupWithViewPager(viewPager)
     }
 
-    private fun addTab(name: String) {
-        val tab = tabLayout.newTab().apply {
-            text = name.capitalize()
-        }
-        tabLayout.addTab(tab)
+    private fun addNone(categories: List<Category>): List<Category> {
+        val none = Category(getString(R.string.none))
+
+        return categories.toMutableList().apply { add(0, none) }
     }
 }

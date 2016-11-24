@@ -3,4 +3,5 @@
     <string name="start_main_activity">Start Main Activity</string>
     <string name="random">Random</string>
     <string name="categories">Categories</string>
+    <string name="none">none</string>
 </resources>

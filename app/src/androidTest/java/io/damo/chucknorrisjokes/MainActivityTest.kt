@@ -5,6 +5,7 @@ import android.support.design.internal.BottomNavigationItemView
 import android.support.design.widget.TabLayout
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.Espresso.registerIdlingResources
+import android.support.test.espresso.ViewInteraction
 import android.support.test.espresso.action.ViewActions.click
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.matcher.ViewMatchers.*
@@ -62,10 +63,35 @@ class MainActivityTest {
         checkTitle(R.string.categories)
 
         waitFor {
-            checkTabWithTitle("Nerdy")
-            checkTabWithTitle("Explicit")
-            checkTabWithTitle("None")
+            checkTopTabWithTitle("none")
+            checkTopTabWithTitle("nerdy")
+            checkTopTabWithTitle("explicit")
         }
+
+        onView(allOf(withId(R.id.joke1), isDisplayed()))
+            .check(matches(withText("Chuck Norris doesn't actually write books, the words assemble themselves out of fear.")))
+        onView(allOf(withId(R.id.joke2), isDisplayed()))
+            .check(matches(withText("Count from one to ten. That's how long it would take Chuck Norris to kill you...Fourty seven times.")))
+        onView(allOf(withId(R.id.joke3), isDisplayed()))
+            .check(matches(withText("Chuck Norris played Russian Roulette with a fully loaded gun and won.")))
+
+        clickTopTab("explicit")
+
+        onView(allOf(withId(R.id.joke1), isDisplayed()))
+            .check(matches(withText("Chuck Norris lost his virginity before his dad did.")))
+        onView(allOf(withId(R.id.joke2), isDisplayed()))
+            .check(matches(withText("Chuck Norris once ate three 72 oz. steaks in one hour. He spent the first 45 minutes having sex with his waitress.")))
+        onView(allOf(withId(R.id.joke3), isDisplayed()))
+            .check(matches(withText("One day Chuck Norris walked down the street with a massive erection. There were no survivors.")))
+
+        clickTopTab("nerdy")
+
+        onView(allOf(withId(R.id.joke1), isDisplayed()))
+            .check(matches(withText("Chuck Norris can access private methods.")))
+        onView(allOf(withId(R.id.joke2), isDisplayed()))
+            .check(matches(withText("Chuck Norris causes the Windows Blue Screen of Death.")))
+        onView(allOf(withId(R.id.joke3), isDisplayed()))
+            .check(matches(withText("Project managers never ask Chuck Norris for estimations... ever.")))
 
 
         clickBottomTab(R.string.random)
@@ -75,13 +101,17 @@ class MainActivityTest {
         }
     }
 
+    private fun clickTopTab(title: String)
+        = onTopTab(title).perform(click())
 
-    private fun checkTabWithTitle(title: String) {
-        onView(allOf(
+    private fun checkTopTabWithTitle(title: String)
+        = onTopTab(title).check(matches(isDisplayed()))
+
+    private fun onTopTab(title: String): ViewInteraction {
+        return onView(allOf(
             withText(title),
             isDescendantOfA(isAssignableFrom(TabLayout::class.java))
         ))
-            .check(matches(isDisplayed()))
     }
 
     private fun clickBottomTab(@StringRes resId: Int) {

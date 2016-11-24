@@ -1,0 +1,62 @@
+package io.damo.chucknorrisjokes
+
+import android.os.Bundle
+import android.support.v4.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import io.damo.chucknorrisjokes.extensions.observe
+import io.damo.chucknorrisjokes.icndb.Joke
+import io.damo.chucknorrisjokes.icndb.Result.Success
+import kotlinx.android.synthetic.main.category_jokes.*
+import rx.Subscription
+
+class CategoryJokesFragment : Fragment() {
+
+    companion object {
+        val CATEGORY_NAME = "CategoryName"
+    }
+
+    private lateinit var subscription: Subscription
+    private lateinit var jokes: List<Joke>
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val categoryName = arguments[CATEGORY_NAME] as String
+        val api = serviceLocator.api
+
+        jokes = emptyList()
+        subscription = observe { api.fetchCategoryJokes(categoryName) }
+            .subscribe { result ->
+                when (result) {
+                    is Success -> {
+                        jokes = result.value
+                        displayJokes()
+                    }
+                }
+            }
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
+        = inflater.inflate(R.layout.category_jokes, container, false)
+
+    override fun onResume() {
+        super.onResume()
+        displayJokes()
+    }
+
+    override fun onDestroy() {
+        subscription.unsubscribe()
+        super.onDestroy()
+    }
+
+
+    private fun displayJokes() {
+        if (jokes.size == 3) {
+            joke1.text = jokes[0].text
+            joke2.text = jokes[1].text
+            joke3.text = jokes[2].text
+        }
+    }
+}

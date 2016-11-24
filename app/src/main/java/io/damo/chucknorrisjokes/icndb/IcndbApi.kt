@@ -19,7 +19,7 @@ class IcndbApi(val okHttp: OkHttpClient, val baseApiUrl: String) {
 
 
     fun fetchRandomJoke(): Result<Joke> = tryFetching("random joke") {
-        val response = fetchJson("jokes/random?exclude=[explicit]&escape=javascript", JokeResponse::class)
+        val response = fetchJson("jokes/random?exclude=[explicit]&escape=javascript", SingleJokeResponse::class)
         val joke = Joke(response.value.joke)
 
         Success(joke)
@@ -30,6 +30,21 @@ class IcndbApi(val okHttp: OkHttpClient, val baseApiUrl: String) {
         val categories = response.value.map(::Category)
 
         Success(categories)
+    }
+
+    fun fetchCategoryJokes(name: String): Result<List<Joke>> = tryFetching("category $name jokes") {
+        val response = fetchJson(categoryPath(name), JokeListResponse::class)
+        val jokes = response.value.map { Joke(it.joke) }
+
+        Success(jokes)
+    }
+
+    private fun categoryPath(name: String): String {
+        if (name == "none") {
+            return "jokes/random/3?exclude=[nerdy,explicit]&escape=javascript"
+        }
+
+        return "jokes/random/3?limitTo=[$name]&escape=javascript"
     }
 
 
@@ -54,9 +69,11 @@ class IcndbApi(val okHttp: OkHttpClient, val baseApiUrl: String) {
     }
 
 
-    data class JokeResponse(val value: JokeResponseValue)
+    data class SingleJokeResponse(val value: JokeJson)
 
-    data class JokeResponseValue(val joke: String)
+    data class JokeListResponse(val value: List<JokeJson>)
+
+    data class JokeJson(val joke: String)
 
     data class CategoriesResponse(val value: List<String>)
 }

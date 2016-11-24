@@ -9,4 +9,7 @@
 
     <color name="text">#999</color>
     <color name="highlighted_text">#000</color>
+
+    <color name="window_bg">#eee</color>
+    <color name="card_bg">#fff</color>
 </resources>

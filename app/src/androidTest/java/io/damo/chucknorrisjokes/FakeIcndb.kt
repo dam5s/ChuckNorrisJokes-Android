@@ -21,6 +21,7 @@ class FakeIcndb : Dispatcher() {
     }
 
 
+    //language=JSON
     val randomJokes = mutableListOf(
         response("""
             { "type": "success",
@@ -40,6 +41,7 @@ class FakeIcndb : Dispatcher() {
         """)
     )
 
+    //language=JSON
     val jokesWithoutCategory = response("""
         { "type": "success", "value": [
             { "id": 73, "joke": "Chuck Norris doesn't actually write books, the words assemble themselves out of fear.", "categories": [] },
@@ -48,6 +50,7 @@ class FakeIcndb : Dispatcher() {
         ]  }
     """)
 
+    //language=JSON
     val nerdyJokes = response("""
         { "type": "success", "value": [
             { "id": 477, "joke": "Chuck Norris can access private methods.", "categories": ["nerdy"] },
@@ -56,6 +59,7 @@ class FakeIcndb : Dispatcher() {
         ]  }
     """)
 
+    //language=JSON
     val explicitJokes = response("""
         { "type": "success", "value": [
             { "id": 5, "joke": "Chuck Norris lost his virginity before his dad did.", "categories": ["explicit"] },

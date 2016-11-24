@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <TextView
+        android:id="@+id/joke1"
+        style="@style/JokeCard"
+        android:layout_marginTop="@dimen/spacing"
+        />
+
+    <TextView
+        android:id="@+id/joke2"
+        style="@style/JokeCard"
+        />
+
+    <TextView
+        android:id="@+id/joke3"
+        style="@style/JokeCard"
+        />
+</LinearLayout>

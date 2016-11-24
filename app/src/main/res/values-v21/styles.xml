@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="JokeCard" parent="JokeCard.Base">
+        <item name="android:elevation">2dp</item>
+    </style>
+</resources>

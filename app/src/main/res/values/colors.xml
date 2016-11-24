@@ -3,6 +3,10 @@
     <color name="primary">#3F51B5</color>
     <color name="primaryDark">#303F9F</color>
     <color name="accent">#FF4081</color>
+
     <color name="highlighted_text_dark_bg">#fff</color>
     <color name="text_dark_bg">#ccc</color>
+
+    <color name="text">#999</color>
+    <color name="highlighted_text">#000</color>
 </resources>

@@ -18,17 +18,29 @@ class IcndbApi(val okHttp: OkHttpClient, val baseApiUrl: String) {
     }
 
 
-    fun fetchRandomJoke(): Result<Joke> {
-        try {
-            val response = fetchJson("jokes/random?escape=javascript", JokeResponse::class)
-            val joke = Joke(response.value.joke)
-            return Success(joke)
+    fun fetchRandomJoke(): Result<Joke> = tryFetching("random joke") {
+        val response = fetchJson("jokes/random?exclude=[explicit]&escape=javascript", JokeResponse::class)
+        val joke = Joke(response.value.joke)
 
-        } catch (e: IOException) {
-            return Error("There was an error when fetching random joke.")
-        }
+        Success(joke)
     }
 
+    fun fetchCategories(): Result<List<Category>> = tryFetching("categories") {
+        val response = fetchJson("categories", CategoriesResponse::class)
+        val categories = response.value.map(::Category)
+
+        Success(categories)
+    }
+
+
+    private fun <T> tryFetching(name: String, fetch: () -> Success<T>): Result<T> {
+        try {
+            return fetch()
+
+        } catch (e: IOException) {
+            return Error("There was an error when fetching $name.")
+        }
+    }
 
     private fun <T : Any> fetchJson(path: String, kClass: KClass<T>): T {
         val httpRequest = Request.Builder()
@@ -45,4 +57,6 @@ class IcndbApi(val okHttp: OkHttpClient, val baseApiUrl: String) {
     data class JokeResponse(val value: JokeResponseValue)
 
     data class JokeResponseValue(val joke: String)
+
+    data class CategoriesResponse(val value: List<String>)
 }

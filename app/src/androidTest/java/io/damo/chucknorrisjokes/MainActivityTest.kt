@@ -2,6 +2,7 @@ package io.damo.chucknorrisjokes
 
 import android.support.annotation.StringRes
 import android.support.design.internal.BottomNavigationItemView
+import android.support.design.widget.TabLayout
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.Espresso.registerIdlingResources
 import android.support.test.espresso.action.ViewActions.click
@@ -48,26 +49,40 @@ class MainActivityTest {
     @Test
     fun test() {
         setupServiceLocatorWithFakeApi()
-
         onView(withId(R.id.mainActivityButton)).perform(click())
+
 
         waitFor {
             onView(withId(R.id.randomJoke))
                 .check(matches(withText("Chuck Norris insists on strongly-typed programming languages.")))
         }
 
-        clickBottomTab(R.string.categories)
 
+        clickBottomTab(R.string.categories)
         checkTitle(R.string.categories)
 
-        clickBottomTab(R.string.random)
+        waitFor {
+            checkTabWithTitle("Nerdy")
+            checkTabWithTitle("Explicit")
+            checkTabWithTitle("None")
+        }
 
+
+        clickBottomTab(R.string.random)
         waitFor {
             onView(withId(R.id.randomJoke))
                 .check(matches(withText("Chuck Norris's brain waves are suspected to be harmful to cell phones.")))
         }
     }
 
+
+    private fun checkTabWithTitle(title: String) {
+        onView(allOf(
+            withText(title),
+            isDescendantOfA(isAssignableFrom(TabLayout::class.java))
+        ))
+            .check(matches(isDisplayed()))
+    }
 
     private fun clickBottomTab(@StringRes resId: Int) {
         onView(allOf(

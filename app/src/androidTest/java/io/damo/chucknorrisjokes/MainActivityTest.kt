@@ -58,7 +58,18 @@ class MainActivityTest {
                 .check(matches(withText("Chuck Norris insists on strongly-typed programming languages.")))
         }
 
+        testCategories()
 
+        clickBottomTab(R.string.random)
+        waitFor {
+            onView(withId(R.id.randomJoke))
+                .check(matches(withText("Chuck Norris's brain waves are suspected to be harmful to cell phones.")))
+        }
+
+        testCategories()
+    }
+
+    private fun testCategories() {
         clickBottomTab(R.string.categories)
         checkTitle(R.string.categories)
 
@@ -93,12 +104,7 @@ class MainActivityTest {
         onView(allOf(withId(R.id.joke3), isDisplayed()))
             .check(matches(withText("Project managers never ask Chuck Norris for estimations... ever.")))
 
-
-        clickBottomTab(R.string.random)
-        waitFor {
-            onView(withId(R.id.randomJoke))
-                .check(matches(withText("Chuck Norris's brain waves are suspected to be harmful to cell phones.")))
-        }
+        clickTopTab("none")
     }
 
     private fun clickTopTab(title: String)

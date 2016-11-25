@@ -36,6 +36,7 @@ class CategoriesAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter
 
         fragment.view?.let { view ->
             if (view.parent != container) {
+                (view.parent as ViewGroup).removeView(view)
                 container.addView(view)
             }
         }

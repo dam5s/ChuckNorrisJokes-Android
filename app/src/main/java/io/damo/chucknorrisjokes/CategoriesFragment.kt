@@ -47,8 +47,10 @@ class CategoriesFragment : Fragment() {
 
 
     private fun setupTabs() {
-        viewPager.adapter = adapter
-        tabLayout.setupWithViewPager(viewPager)
+        if (adapter.categories.isNotEmpty()) {
+            viewPager.adapter = adapter
+            tabLayout.setupWithViewPager(viewPager)
+        }
     }
 
     private fun addNone(categories: List<Category>): List<Category> {

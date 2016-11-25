@@ -1,10 +1,9 @@
 package io.damo.chucknorrisjokes
 
-import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import io.damo.chucknorrisjokes.CategoryJokesFragment.Companion.CATEGORY_NAME
+import android.view.ViewGroup
 import io.damo.chucknorrisjokes.icndb.Category
 
 class CategoriesAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
@@ -16,17 +15,31 @@ class CategoriesAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter
         }
 
 
-    override fun getItem(position: Int) = buildFragment(position)
+    override fun getItem(position: Int)
+        = CategoryJokesFragment.build(categories[position].name)
 
-    override fun getCount() = categories.size
+    override fun getCount()
+        = categories.size
 
-    override fun getPageTitle(position: Int) = categories[position].name
+    override fun getPageTitle(position: Int)
+        = categories[position].name
 
 
-    fun buildFragment(position: Int): Fragment {
-        val category = categories[position]
-        val bundle = Bundle().apply { putString(CATEGORY_NAME, category.name) }
+    /*
+     * Fix an issue with FragmentPagerAdapter:
+     *
+     * When using the adapter with a different ViewPager (same id),
+     * It does not ensure the fragment's view is in the new ViewPager.
+     */
+    override fun instantiateItem(container: ViewGroup, position: Int): Any {
+        val fragment = super.instantiateItem(container, position) as Fragment
 
-        return CategoryJokesFragment().apply { arguments = bundle }
+        fragment.view?.let { view ->
+            if (view.parent != container) {
+                container.addView(view)
+            }
+        }
+
+        return fragment
     }
 }

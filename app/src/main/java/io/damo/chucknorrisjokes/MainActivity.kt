@@ -59,4 +59,3 @@ class MainActivity : AppCompatActivity() {
         setTitle(R.string.app_label)
     }
 }
-

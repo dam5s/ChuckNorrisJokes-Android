@@ -14,16 +14,24 @@ import rx.Subscription
 class CategoryJokesFragment : Fragment() {
 
     companion object {
-        val CATEGORY_NAME = "CategoryName"
+        fun build(categoryName: String): CategoryJokesFragment {
+            val bundle = Bundle().apply {
+                putString("categoryName", categoryName)
+            }
+
+            return CategoryJokesFragment().apply { arguments = bundle }
+        }
     }
+
 
     private lateinit var subscription: Subscription
     private lateinit var jokes: List<Joke>
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val categoryName = arguments[CATEGORY_NAME] as String
+        val categoryName = arguments["categoryName"] as String
         val api = serviceLocator.api
 
         jokes = emptyList()

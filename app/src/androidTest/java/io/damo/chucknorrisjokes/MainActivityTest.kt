@@ -67,6 +67,8 @@ class MainActivityTest {
         }
 
         testCategories()
+
+        testFavorites()
     }
 
     private fun testCategories() {
@@ -105,6 +107,11 @@ class MainActivityTest {
             .check(matches(withText("Project managers never ask Chuck Norris for estimations... ever.")))
 
         clickTopTab("none")
+    }
+
+    private fun testFavorites() {
+        clickBottomTab(R.string.favorites)
+        checkTitle(R.string.favorites)
     }
 
     private fun clickTopTab(title: String)

@@ -11,6 +11,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var randomJokeFragment: Fragment
     private lateinit var categoriesFragment: Fragment
+    private lateinit var favoritesFragment: Fragment
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,6 +21,7 @@ class MainActivity : AppCompatActivity() {
 
         randomJokeFragment = RandomJokeFragment()
         categoriesFragment = CategoriesFragment()
+        favoritesFragment = FavoritesFragment()
 
         supportFragmentManager
             .beginTransaction()
@@ -38,6 +40,11 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
 
+                R.id.favorites -> {
+                    navigateToFavorites()
+                    true
+                }
+
                 else -> false
             }
         }
@@ -47,6 +54,8 @@ class MainActivity : AppCompatActivity() {
     private fun navigateToCategories() = navigateTo(categoriesFragment, R.string.categories)
 
     private fun navigateToRandom() = navigateTo(randomJokeFragment, R.string.app_label)
+
+    private fun navigateToFavorites() = navigateTo(favoritesFragment, R.string.favorites)
 
     private fun navigateTo(fragment: Fragment, @StringRes resId: Int) {
         supportFragmentManager

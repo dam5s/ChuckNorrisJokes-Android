@@ -10,4 +10,9 @@
         android:icon="@drawable/ic_pages_white_24dp"
         android:title="@string/categories"
         />
+    <item
+        android:id="@+id/favorites"
+        android:icon="@drawable/ic_favorite_white_24dp"
+        android:title="@string/favorites"
+        />
 </menu>

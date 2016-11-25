@@ -4,4 +4,6 @@
     <string name="random">Random</string>
     <string name="categories">Categories</string>
     <string name="none">none</string>
+    <string name="favorites">Favorites</string>
+    <string name="nothing_in_favorites">Nothing in Favorites</string>
 </resources>

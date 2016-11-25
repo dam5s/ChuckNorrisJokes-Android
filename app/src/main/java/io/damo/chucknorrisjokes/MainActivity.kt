@@ -1,6 +1,7 @@
 package io.damo.chucknorrisjokes
 
 import android.os.Bundle
+import android.support.annotation.StringRes
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.main.*
@@ -43,19 +44,15 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun navigateToCategories() {
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.fragment, categoriesFragment)
-            .commit()
-        setTitle(R.string.categories)
-    }
+    private fun navigateToCategories() = navigateTo(categoriesFragment, R.string.categories)
 
-    private fun navigateToRandom() {
+    private fun navigateToRandom() = navigateTo(randomJokeFragment, R.string.app_label)
+
+    private fun navigateTo(fragment: Fragment, @StringRes resId: Int) {
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.fragment, randomJokeFragment)
+            .replace(R.id.fragment, fragment)
             .commit()
-        setTitle(R.string.app_label)
+        setTitle(resId)
     }
 }

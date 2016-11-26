@@ -1,16 +1,24 @@
 package io.damo.chucknorrisjokes.utils
 
-import io.damo.chucknorrisjokes.utils.Result.Success
 
 sealed class Result<T> {
-    class Success<T>(val value: T) : Result<T>()
-    class Error<T>(val message: String) : Result<T>()
-}
 
-fun <T> Result<T>.then(callback: (T) -> Unit): Result<T> {
-    when (this) {
-        is Success -> callback(this.value)
+    abstract fun then(callback: (T) -> Unit): Result<T>
+    abstract fun otherwise(errorCallback: (String) -> Unit): Result<T>
+
+    class Success<T>(val value: T) : Result<T>() {
+        override fun then(callback: (T) -> Unit) = apply {
+            callback(value)
+        }
+
+        override fun otherwise(errorCallback: (String) -> Unit) = this
     }
 
-    return this
+    class Error<T>(val message: String) : Result<T>() {
+        override fun then(callback: (T) -> Unit) = this
+
+        override fun otherwise(errorCallback: (String) -> Unit) = apply {
+            errorCallback(message)
+        }
+    }
 }

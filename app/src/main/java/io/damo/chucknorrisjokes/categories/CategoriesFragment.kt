@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import io.damo.chucknorrisjokes.R
 import io.damo.chucknorrisjokes.icndb.Category
 import io.damo.chucknorrisjokes.serviceLocator
-import io.damo.chucknorrisjokes.utils.Result.Success
 import io.damo.chucknorrisjokes.utils.observe
 import kotlinx.android.synthetic.main.categories.*
 import rx.Subscription
@@ -25,11 +24,9 @@ class CategoriesFragment : Fragment() {
         adapter = CategoriesAdapter(fragmentManager)
         subscription = observe { serviceLocator.api.fetchCategories() }
             .subscribe { result ->
-                when (result) {
-                    is Success -> {
-                        adapter.categories = addNone(result.value)
-                        setupTabs()
-                    }
+                result.then {
+                    adapter.categories = addNone(it)
+                    setupTabs()
                 }
             }
     }

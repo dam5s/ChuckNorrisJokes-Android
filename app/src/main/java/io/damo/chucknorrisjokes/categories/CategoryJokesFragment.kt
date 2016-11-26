@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import io.damo.chucknorrisjokes.R
 import io.damo.chucknorrisjokes.icndb.Joke
 import io.damo.chucknorrisjokes.serviceLocator
-import io.damo.chucknorrisjokes.utils.Result.Success
 import io.damo.chucknorrisjokes.utils.observe
 import kotlinx.android.synthetic.main.category_jokes.*
 import rx.Subscription
@@ -39,11 +38,9 @@ class CategoryJokesFragment : Fragment() {
         jokes = emptyList()
         subscription = observe { api.fetchCategoryJokes(categoryName) }
             .subscribe { result ->
-                when (result) {
-                    is Success -> {
-                        jokes = result.value
-                        displayJokes()
-                    }
+                result.then {
+                    jokes = it
+                    displayJokes()
                 }
             }
     }

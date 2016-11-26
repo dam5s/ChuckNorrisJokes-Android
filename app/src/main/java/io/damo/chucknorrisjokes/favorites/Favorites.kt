@@ -6,7 +6,6 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.damo.chucknorrisjokes.icndb.Joke
 import io.damo.chucknorrisjokes.utils.Result
 import io.damo.chucknorrisjokes.utils.Result.Success
-import io.damo.chucknorrisjokes.utils.then
 
 class Favorites(val fileStorage: FileStorage) {
 

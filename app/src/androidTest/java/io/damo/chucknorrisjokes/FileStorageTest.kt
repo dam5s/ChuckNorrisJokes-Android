@@ -4,8 +4,6 @@ import android.content.Context
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import io.damo.chucknorrisjokes.favorites.AndroidFileStorage
-import io.damo.chucknorrisjokes.utils.Result.Error
-import io.damo.chucknorrisjokes.utils.Result.Success
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.Assert.fail
@@ -50,25 +48,25 @@ class FileStorageTest {
     fun testLoad_WhenFound() {
         testFile.writeText("Oh hai!!")
 
-        val loaded = fileStorage.load("foo.txt")
-
-        when (loaded) {
-            is Success ->
-                assertThat(loaded.value, equalTo("Oh hai!!"))
-            is Error ->
+        fileStorage
+            .load("foo.txt")
+            .then {
+                assertThat(it, equalTo("Oh hai!!"))
+            }
+            .otherwise {
                 fail("Expected to have success")
-        }
+            }
     }
 
     @Test
     fun testLoad_WhenNotFound() {
-        val loaded = fileStorage.load("foo.txt")
-
-        when (loaded) {
-            is Success ->
+        fileStorage
+            .load("foo.txt")
+            .then {
                 fail("Expected to have error")
-            is Error ->
-                assertThat(loaded.message, not(isEmptyString()))
-        }
+            }
+            .otherwise {
+                assertThat(it, not(isEmptyString()))
+            }
     }
 }

@@ -15,7 +15,6 @@ import android.view.ViewGroup
 import io.damo.chucknorrisjokes.R
 import io.damo.chucknorrisjokes.serviceLocator
 import io.damo.chucknorrisjokes.utils.setVisibleIf
-import io.damo.chucknorrisjokes.utils.then
 import kotlinx.android.synthetic.main.favorites.*
 
 class FavoritesFragment : Fragment() {

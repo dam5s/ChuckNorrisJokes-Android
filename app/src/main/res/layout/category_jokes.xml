@@ -13,7 +13,6 @@
 
         <android.support.v7.widget.CardView
             style="@style/JokeCard"
-            android:layout_marginTop="@dimen/spacing"
             >
 
             <TextView

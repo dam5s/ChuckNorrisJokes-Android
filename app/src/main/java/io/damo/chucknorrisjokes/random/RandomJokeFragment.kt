@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import io.damo.chucknorrisjokes.R
 import io.damo.chucknorrisjokes.favorites.Favorites
@@ -15,6 +14,7 @@ import io.damo.chucknorrisjokes.serviceLocator
 import io.damo.chucknorrisjokes.utils.Result
 import io.damo.chucknorrisjokes.utils.Result.Success
 import io.damo.chucknorrisjokes.utils.observe
+import io.damo.chucknorrisjokes.utils.setVisibleIf
 import io.damo.chucknorrisjokes.utils.toast
 import kotlinx.android.synthetic.main.random_joke.*
 import rx.Subscription
@@ -47,7 +47,7 @@ class RandomJokeFragment : Fragment() {
                         joke = result.value
 
                         randomJoke.text = joke!!.text
-                        addToFavorites.visibility = visibleIf(favorites.canAdd(joke!!))
+                        addToFavorites.setVisibleIf(favorites.canAdd(joke!!))
                     }
 
 
@@ -66,8 +66,6 @@ class RandomJokeFragment : Fragment() {
         }
     }
 
-    fun visibleIf(condition: Boolean, otherwise: Int = GONE)
-        = if (condition) VISIBLE else otherwise
 
     override fun onPause() {
         subscription.unsubscribe()

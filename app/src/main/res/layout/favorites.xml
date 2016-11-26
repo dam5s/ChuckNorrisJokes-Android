@@ -22,12 +22,11 @@
         android:textSize="30sp"
         />
 
-    <ListView
-        android:id="@+id/favoritesListView"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/favoritesView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@android:color/transparent"
         android:dividerHeight="0dp"
-        android:paddingTop="@dimen/half_spacing"
         />
 </LinearLayout>

@@ -23,21 +23,21 @@ class FavoritesFragment : Fragment() {
     private lateinit var adapter: FavoritesAdapter
     private lateinit var layoutManager: RecyclerView.LayoutManager
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         favorites = serviceLocator.favorites
         adapter = FavoritesAdapter(favorites.all(), context)
         layoutManager = LinearLayoutManager(context)
+    }
 
-        val view = inflater.inflate(R.layout.favorites, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
+        = inflater.inflate(R.layout.favorites, container, false)
 
-        val favoritesView = view.findViewById(R.id.favoritesView) as RecyclerView
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         favoritesView.layoutManager = layoutManager
         favoritesView.adapter = adapter
-
         ItemTouchHelper(favoritesCallback).attachToRecyclerView(favoritesView)
-
-        return view
     }
 
     override fun onResume() {

@@ -48,10 +48,8 @@ class CategoryJokesFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
         = inflater.inflate(R.layout.category_jokes, container, false)
 
-    override fun onResume() {
-        super.onResume()
-        displayJokes()
-    }
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?)
+        = displayJokes()
 
     override fun onDestroy() {
         subscription.unsubscribe()

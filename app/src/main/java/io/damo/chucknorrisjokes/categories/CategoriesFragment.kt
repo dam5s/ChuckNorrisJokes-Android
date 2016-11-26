@@ -34,10 +34,8 @@ class CategoriesFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
         = inflater.inflate(R.layout.categories, container, false)
 
-    override fun onResume() {
-        super.onResume()
-        setupTabs()
-    }
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?)
+        = setupTabs()
 
     override fun onDestroy() {
         subscription.unsubscribe()

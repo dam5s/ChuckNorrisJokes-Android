@@ -6,6 +6,7 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.damo.chucknorrisjokes.icndb.Joke
 import io.damo.chucknorrisjokes.utils.Result
 import io.damo.chucknorrisjokes.utils.Result.Success
+import io.damo.chucknorrisjokes.utils.then
 
 class Favorites(val fileStorage: FileStorage) {
 
@@ -21,21 +22,22 @@ class Favorites(val fileStorage: FileStorage) {
     fun load() {
         jokes = mutableListOf()
 
-        val result = fileStorage.load("favorites.json")
-        when (result) {
-            is Success -> {
-                jokes = mapper.readValue(result.value, jokesTypeRef)
+        fileStorage
+            .load("favorites.json")
+            .then {
+                jokes = mapper.readValue(it, jokesTypeRef)
             }
-        }
     }
 
     fun canAdd(joke: Joke) = !jokes.contains(joke)
 
-    fun add(joke: Joke): Result<Boolean> {
+    fun add(joke: Joke): Result<Int> {
         jokes.add(joke)
+        jokes.sortBy(Joke::id)
+
         persist()
 
-        return Success(true)
+        return Success(jokes.indexOf(joke))
     }
 
     fun all(): List<Joke> = jokes

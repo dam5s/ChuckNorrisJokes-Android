@@ -37,19 +37,29 @@ class FavoritesTest {
     }
 
     @Test
-    fun testAdd() {
+    fun testAdd_ReturnsResultWithIndexOfJoke() {
         val addResult = favorites.add(Joke(1, "Oh hello"))
-
         when (addResult) {
+            is Success -> assertThat(addResult.value, equalTo(0))
             is Error -> fail("Expected success")
         }
-
         assertThat(fileStorage.files["favorites.json"], equalTo("""[{"id":1,"text":"Oh hello"}]"""))
 
 
-        favorites.add(Joke(2, "Hello World!"))
+        val addToTheEndResult = favorites.add(Joke(3, "Hello World!"))
+        when (addToTheEndResult) {
+            is Success -> assertThat(addToTheEndResult.value, equalTo(1))
+            is Error -> fail("Expected success")
+        }
+        assertThat(fileStorage.files["favorites.json"], equalTo("""[{"id":1,"text":"Oh hello"},{"id":3,"text":"Hello World!"}]"""))
 
-        assertThat(fileStorage.files["favorites.json"], equalTo("""[{"id":1,"text":"Oh hello"},{"id":2,"text":"Hello World!"}]"""))
+
+        val addInTheMiddleResult = favorites.add(Joke(2, "What's up!"))
+        when (addInTheMiddleResult) {
+            is Success -> assertThat(addInTheMiddleResult.value, equalTo(1))
+            is Error -> fail("Expected success")
+        }
+        assertThat(fileStorage.files["favorites.json"], equalTo("""[{"id":1,"text":"Oh hello"},{"id":2,"text":"What's up!"},{"id":3,"text":"Hello World!"}]"""))
     }
 
     @Test

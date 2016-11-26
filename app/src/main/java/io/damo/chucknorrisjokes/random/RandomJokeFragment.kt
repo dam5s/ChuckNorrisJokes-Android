@@ -11,10 +11,11 @@ import io.damo.chucknorrisjokes.favorites.Favorites
 import io.damo.chucknorrisjokes.icndb.IcndbApi
 import io.damo.chucknorrisjokes.icndb.Joke
 import io.damo.chucknorrisjokes.serviceLocator
-import io.damo.chucknorrisjokes.utils.Result
+import io.damo.chucknorrisjokes.utils.Result.Error
 import io.damo.chucknorrisjokes.utils.Result.Success
 import io.damo.chucknorrisjokes.utils.observe
 import io.damo.chucknorrisjokes.utils.setVisibleIf
+import io.damo.chucknorrisjokes.utils.then
 import io.damo.chucknorrisjokes.utils.toast
 import kotlinx.android.synthetic.main.random_joke.*
 import rx.Subscription
@@ -50,17 +51,15 @@ class RandomJokeFragment : Fragment() {
                         addToFavorites.setVisibleIf(favorites.canAdd(joke!!))
                     }
 
-
-                    is Result.Error ->
+                    is Error ->
                         toast(result.message)
                 }
             }
 
         addToFavorites.setOnClickListener {
             joke?.let {
-                when (favorites.add(it)) {
-                    is Success ->
-                        addToFavorites.visibility = GONE
+                favorites.add(it).then {
+                    addToFavorites.visibility = GONE
                 }
             }
         }

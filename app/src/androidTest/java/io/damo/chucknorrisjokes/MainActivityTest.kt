@@ -5,7 +5,6 @@ import android.support.design.internal.BottomNavigationItemView
 import android.support.design.widget.TabLayout
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.Espresso.registerIdlingResources
-import android.support.test.espresso.ViewInteraction
 import android.support.test.espresso.action.ViewActions.click
 import android.support.test.espresso.action.ViewActions.swipeRight
 import android.support.test.espresso.assertion.ViewAssertions.matches
@@ -78,29 +77,57 @@ class MainActivityTest {
         val favoriteJokeText = "Chuck Norris's brain waves are suspected to be harmful to cell phones."
 
 
+        // check empty favorites
         clickBottomTab(R.string.favorites)
         checkTitle(R.string.favorites)
 
         onView(withText(R.string.nothing_in_favorites))
             .check(matches(isDisplayed()))
 
+        // add random joke to favorites
         clickBottomTab(R.string.random)
 
         waitFor {
             onView(withId(R.id.randomJoke)).check(matches(withText(favoriteJokeText)))
         }
 
-        onView(withId(R.id.addToFavorites)).perform(click())
-        onView(withId(R.id.addToFavorites)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.addToFavorites))
+            .perform(click())
+            .check(matches(not(isDisplayed())))
 
-
+        // check we have the favorite then remove it
         clickBottomTab(R.string.favorites)
 
-        onView(withText(favoriteJokeText)).check(matches(isDisplayed()))
-        onView(withText(favoriteJokeText)).perform(swipeRight())
-        onView(withText(favoriteJokeText)).check(matches(not(isDisplayed())))
-        onView(withText(R.string.nothing_in_favorites)).check(matches(isDisplayed()))
+        onView(withText(favoriteJokeText))
+            .check(matches(isDisplayed()))
+            .perform(swipeRight())
+            .check(matches(not(isDisplayed())))
 
+        onView(withText(R.string.nothing_in_favorites))
+            .check(matches(isDisplayed()))
+
+
+        // undo, check and remove again
+        waitFor {
+            onView(withText(R.string.undo))
+                .check(matches(isCompletelyDisplayed()))
+        }
+
+        onView(withText(R.string.undo)).perform(click())
+
+        onView(withText(R.string.nothing_in_favorites))
+            .check(matches(not(isDisplayed())))
+
+        onView(withText(favoriteJokeText))
+            .check(matches(isDisplayed()))
+            .perform(swipeRight())
+            .check(matches(not(isDisplayed())))
+
+        onView(withText(R.string.nothing_in_favorites))
+            .check(matches(isDisplayed()))
+
+
+        // check it's persisted
         clickBottomTab(R.string.categories)
         clickBottomTab(R.string.favorites)
 
@@ -145,18 +172,18 @@ class MainActivityTest {
         clickTopTab("none")
     }
 
+
     private fun clickTopTab(title: String)
         = onTopTab(title).perform(click())
 
     private fun checkTopTabWithTitle(title: String)
         = onTopTab(title).check(matches(isDisplayed()))
 
-    private fun onTopTab(title: String): ViewInteraction {
-        return onView(allOf(
+    private fun onTopTab(title: String)
+        = onView(allOf(
             withText(title),
             isDescendantOfA(isAssignableFrom(TabLayout::class.java))
         ))
-    }
 
     private fun clickBottomTab(@StringRes resId: Int) {
         onView(allOf(
@@ -174,6 +201,7 @@ class MainActivityTest {
         ))
             .check(matches(withText(resId)))
     }
+
 
     private fun setupServices() {
         val baseApiUrl = mockWebServer!!.url("").toString()

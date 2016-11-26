@@ -1,6 +1,8 @@
 package io.damo.chucknorrisjokes.favorites
 
 import android.os.Bundle
+import android.support.design.widget.Snackbar
+import android.support.design.widget.Snackbar.LENGTH_LONG
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -13,7 +15,7 @@ import android.view.ViewGroup
 import io.damo.chucknorrisjokes.R
 import io.damo.chucknorrisjokes.serviceLocator
 import io.damo.chucknorrisjokes.utils.setVisibleIf
-import io.damo.chucknorrisjokes.utils.toast
+import io.damo.chucknorrisjokes.utils.then
 import kotlinx.android.synthetic.main.favorites.*
 
 class FavoritesFragment : Fragment() {
@@ -58,7 +60,16 @@ class FavoritesFragment : Fragment() {
             adapter.notifyItemRemoved(position)
 
             updateViewsVisibility()
-            toast(R.string.removed_from_favorites)
+
+            Snackbar
+                .make(favoritesView, R.string.removed_from_favorites, LENGTH_LONG)
+                .setAction(R.string.undo) {
+                    favorites.add(joke).then {
+                        adapter.notifyItemInserted(it)
+                        updateViewsVisibility()
+                    }
+                }
+                .show()
         }
     }
 

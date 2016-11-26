@@ -22,12 +22,9 @@ class RandomJokeFragment : Fragment() {
 
     private lateinit var api: IcndbApi
     private lateinit var favorites: Favorites
-    private lateinit var subscription: Subscription
 
+    private var subscription: Subscription? = null
     private var joke: Joke? = null
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
-        = inflater.inflate(R.layout.random_joke, container, false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,8 +32,33 @@ class RandomJokeFragment : Fragment() {
         favorites = serviceLocator.favorites
     }
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
+        = inflater.inflate(R.layout.random_joke, container, false)
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        swipeToRefresh.setOnRefreshListener { loadJoke() }
+
+        addToFavorites.setOnClickListener {
+            joke?.let {
+                favorites.add(it).then {
+                    addToFavorites.visibility = GONE
+                }
+            }
+        }
+    }
+
     override fun onResume() {
         super.onResume()
+        loadJoke()
+    }
+
+    override fun onPause() {
+        subscription?.unsubscribe()
+        super.onPause()
+    }
+
+    private fun loadJoke() {
+        subscription?.unsubscribe()
 
         subscription = observe { api.fetchRandomJoke() }
             .subscribe { result ->
@@ -49,20 +71,7 @@ class RandomJokeFragment : Fragment() {
                     .otherwise {
                         toast(it)
                     }
+                    .always { swipeToRefresh.isRefreshing = false }
             }
-
-        addToFavorites.setOnClickListener {
-            joke?.let {
-                favorites.add(it).then {
-                    addToFavorites.visibility = GONE
-                }
-            }
-        }
-    }
-
-
-    override fun onPause() {
-        subscription.unsubscribe()
-        super.onPause()
     }
 }

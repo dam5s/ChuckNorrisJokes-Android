@@ -6,6 +6,9 @@ sealed class Result<T> {
     abstract fun then(callback: (T) -> Unit): Result<T>
     abstract fun otherwise(errorCallback: (String) -> Unit): Result<T>
 
+    fun always(callback: () -> Unit) = apply { callback() }
+
+
     class Success<T>(val value: T) : Result<T>() {
         override fun then(callback: (T) -> Unit) = apply {
             callback(value)

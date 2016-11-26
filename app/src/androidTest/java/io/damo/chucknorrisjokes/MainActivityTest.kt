@@ -5,8 +5,7 @@ import android.support.design.internal.BottomNavigationItemView
 import android.support.design.widget.TabLayout
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.Espresso.registerIdlingResources
-import android.support.test.espresso.action.ViewActions.click
-import android.support.test.espresso.action.ViewActions.swipeRight
+import android.support.test.espresso.action.ViewActions.*
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.rule.ActivityTestRule
@@ -68,6 +67,12 @@ class MainActivityTest {
         waitFor {
             onView(withId(R.id.randomJoke))
                 .check(matches(withText("In an act of great philanthropy, Chuck made a generous donation to the American Cancer Society. He donated 6,000 dead bodies for scientific research.")))
+        }
+
+        onView(withId(R.id.randomJoke)).perform(swipeDown())
+        waitFor {
+            onView(withId(R.id.randomJoke))
+                .check(matches(withText("A study showed the leading causes of death in the United States are: 1. Heart disease, 2. Chuck Norris, 3. Cancer")))
         }
 
         testCategories()

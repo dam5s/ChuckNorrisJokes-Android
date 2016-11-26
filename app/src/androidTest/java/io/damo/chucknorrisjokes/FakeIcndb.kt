@@ -46,6 +46,14 @@ class FakeIcndb : Dispatcher() {
                 "joke": "In an act of great philanthropy, Chuck made a generous donation to the American Cancer Society. He donated 6,000 dead bodies for scientific research.",
                 "categories": []
             } }
+        """),
+        response("""
+            { "type": "success",
+              "value": {
+                "id": 157,
+                "joke": "A study showed the leading causes of death in the United States are: 1. Heart disease, 2. Chuck Norris, 3. Cancer",
+                "categories": []
+            } }
         """)
     )
 

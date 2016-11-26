@@ -58,4 +58,5 @@ dependencies {
 
 
     testCompile 'junit:junit:4.12'
+    testCompile 'org.hamcrest:hamcrest-all:1.3'
 }

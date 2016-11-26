@@ -1,4 +1,4 @@
-package io.damo.chucknorrisjokes.extensions
+package io.damo.chucknorrisjokes.utils
 
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers

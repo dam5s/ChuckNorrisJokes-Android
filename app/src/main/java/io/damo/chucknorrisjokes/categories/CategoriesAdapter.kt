@@ -1,4 +1,4 @@
-package io.damo.chucknorrisjokes
+package io.damo.chucknorrisjokes.categories
 
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager

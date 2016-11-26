@@ -3,8 +3,9 @@ package io.damo.chucknorrisjokes.icndb
 import com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
-import io.damo.chucknorrisjokes.icndb.Result.Error
-import io.damo.chucknorrisjokes.icndb.Result.Success
+import io.damo.chucknorrisjokes.utils.Result
+import io.damo.chucknorrisjokes.utils.Result.Error
+import io.damo.chucknorrisjokes.utils.Result.Success
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.IOException
@@ -20,23 +21,20 @@ class IcndbApi(val okHttp: OkHttpClient, val baseApiUrl: String) {
 
     fun fetchRandomJoke(): Result<Joke> = tryFetching("random joke") {
         val response = fetchJson("jokes/random?exclude=[explicit]&escape=javascript", SingleJokeResponse::class)
-        val joke = Joke(response.value.joke)
 
-        Success(joke)
+        Success(response.mapJoke())
     }
 
     fun fetchCategories(): Result<List<Category>> = tryFetching("categories") {
         val response = fetchJson("categories", CategoriesResponse::class)
-        val categories = response.value.map(::Category)
 
-        Success(categories)
+        Success(response.mapCategories())
     }
 
     fun fetchCategoryJokes(name: String): Result<List<Joke>> = tryFetching("category $name jokes") {
         val response = fetchJson(categoryPath(name), JokeListResponse::class)
-        val jokes = response.value.map { Joke(it.joke) }
 
-        Success(jokes)
+        Success(response.mapJokes())
     }
 
     private fun categoryPath(name: String): String {
@@ -69,11 +67,19 @@ class IcndbApi(val okHttp: OkHttpClient, val baseApiUrl: String) {
     }
 
 
-    data class SingleJokeResponse(val value: JokeJson)
+    data class SingleJokeResponse(val value: JokeJson) {
+        fun mapJoke() = value.mapJoke()
+    }
 
-    data class JokeListResponse(val value: List<JokeJson>)
+    data class JokeListResponse(val value: List<JokeJson>) {
+        fun mapJokes() = value.map { it.mapJoke() }
+    }
 
-    data class JokeJson(val joke: String)
+    data class JokeJson(val id: Int, val joke: String) {
+        fun mapJoke() = Joke(id, joke)
+    }
 
-    data class CategoriesResponse(val value: List<String>)
+    data class CategoriesResponse(val value: List<String>) {
+        fun mapCategories() = value.map(::Category)
+    }
 }

@@ -1,4 +1,4 @@
-package io.damo.chucknorrisjokes.extensions
+package io.damo.chucknorrisjokes.utils
 
 import android.support.v4.app.Fragment
 import android.widget.Toast

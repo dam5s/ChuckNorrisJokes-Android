@@ -1,4 +1,4 @@
-package io.damo.chucknorrisjokes.icndb
+package io.damo.chucknorrisjokes.utils
 
 sealed class Result<T> {
     class Success<T>(val value: T) : Result<T>()

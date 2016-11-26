@@ -16,11 +16,13 @@ import com.jakewharton.espresso.OkHttp3IdlingResource
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockWebServer
 import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.not
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.io.File
 
 
 @RunWith(AndroidJUnit4::class)
@@ -49,7 +51,7 @@ class MainActivityTest {
 
     @Test
     fun test() {
-        setupServiceLocatorWithFakeApi()
+        setupServices()
         onView(withId(R.id.mainActivityButton)).perform(click())
 
 
@@ -58,17 +60,41 @@ class MainActivityTest {
                 .check(matches(withText("Chuck Norris insists on strongly-typed programming languages.")))
         }
 
+        testFavorites()
+
         testCategories()
 
         clickBottomTab(R.string.random)
         waitFor {
             onView(withId(R.id.randomJoke))
-                .check(matches(withText("Chuck Norris's brain waves are suspected to be harmful to cell phones.")))
+                .check(matches(withText("In an act of great philanthropy, Chuck made a generous donation to the American Cancer Society. He donated 6,000 dead bodies for scientific research.")))
         }
 
         testCategories()
+    }
 
-        testFavorites()
+    private fun testFavorites() {
+        clickBottomTab(R.string.favorites)
+        checkTitle(R.string.favorites)
+
+        onView(withText(R.string.nothing_in_favorites))
+            .check(matches(isDisplayed()))
+
+        clickBottomTab(R.string.random)
+
+        waitFor {
+            onView(withId(R.id.randomJoke))
+                .check(matches(withText("Chuck Norris's brain waves are suspected to be harmful to cell phones.")))
+        }
+
+        onView(withId(R.id.addToFavorites)).perform(click())
+        onView(withId(R.id.addToFavorites)).check(matches(not(isDisplayed())))
+
+
+        clickBottomTab(R.string.favorites)
+
+        onView(withText("Chuck Norris's brain waves are suspected to be harmful to cell phones."))
+            .check(matches(isDisplayed()))
     }
 
     private fun testCategories() {
@@ -109,11 +135,6 @@ class MainActivityTest {
         clickTopTab("none")
     }
 
-    private fun testFavorites() {
-        clickBottomTab(R.string.favorites)
-        checkTitle(R.string.favorites)
-    }
-
     private fun clickTopTab(title: String)
         = onTopTab(title).perform(click())
 
@@ -144,8 +165,11 @@ class MainActivityTest {
             .check(matches(withText(resId)))
     }
 
-    private fun setupServiceLocatorWithFakeApi() {
+    private fun setupServices() {
         val baseApiUrl = mockWebServer!!.url("").toString()
+
+        val filesDir = rule.activity.app.filesDir
+        File(filesDir, "favorites.json").delete()
 
         rule.activity.app.apply {
             serviceLocator = ServiceLocator(this, okHttp, baseApiUrl)

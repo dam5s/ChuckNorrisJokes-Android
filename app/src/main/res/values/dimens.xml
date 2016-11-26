@@ -1,3 +1,4 @@
 <resources>
     <dimen name="spacing">16dp</dimen>
+    <dimen name="half_spacing">8dp</dimen>
 </resources>

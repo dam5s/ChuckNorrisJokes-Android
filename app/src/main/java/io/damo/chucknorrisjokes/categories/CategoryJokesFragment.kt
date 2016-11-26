@@ -1,13 +1,15 @@
-package io.damo.chucknorrisjokes
+package io.damo.chucknorrisjokes.categories
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import io.damo.chucknorrisjokes.extensions.observe
+import io.damo.chucknorrisjokes.R
 import io.damo.chucknorrisjokes.icndb.Joke
-import io.damo.chucknorrisjokes.icndb.Result.Success
+import io.damo.chucknorrisjokes.serviceLocator
+import io.damo.chucknorrisjokes.utils.Result.Success
+import io.damo.chucknorrisjokes.utils.observe
 import kotlinx.android.synthetic.main.category_jokes.*
 import rx.Subscription
 

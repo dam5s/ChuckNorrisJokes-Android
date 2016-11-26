@@ -38,6 +38,14 @@ class FakeIcndb : Dispatcher() {
                 "joke": "Chuck Norris's brain waves are suspected to be harmful to cell phones.",
                 "categories": []
             } }
+        """),
+        response("""
+            { "type": "success",
+              "value": {
+                "id": 178,
+                "joke": "In an act of great philanthropy, Chuck made a generous donation to the American Cancer Society. He donated 6,000 dead bodies for scientific research.",
+                "categories": []
+            } }
         """)
     )
 

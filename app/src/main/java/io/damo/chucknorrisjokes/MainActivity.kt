@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.support.annotation.StringRes
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import io.damo.chucknorrisjokes.categories.CategoriesFragment
+import io.damo.chucknorrisjokes.favorites.FavoritesFragment
+import io.damo.chucknorrisjokes.random.RandomJokeFragment
 import kotlinx.android.synthetic.main.main.*
 
 class MainActivity : AppCompatActivity() {

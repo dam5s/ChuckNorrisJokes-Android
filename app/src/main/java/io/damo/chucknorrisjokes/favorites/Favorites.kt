@@ -46,4 +46,9 @@ class Favorites(val fileStorage: FileStorage) {
     private fun persist() {
         fileStorage.save("favorites.json", mapper.writeValueAsString(jokes))
     }
+
+    fun remove(joke: Joke) {
+        jokes.remove(joke)
+        persist()
+    }
 }

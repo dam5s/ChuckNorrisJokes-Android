@@ -7,6 +7,7 @@ import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.Espresso.registerIdlingResources
 import android.support.test.espresso.ViewInteraction
 import android.support.test.espresso.action.ViewActions.click
+import android.support.test.espresso.action.ViewActions.swipeRight
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.rule.ActivityTestRule
@@ -74,6 +75,9 @@ class MainActivityTest {
     }
 
     private fun testFavorites() {
+        val favoriteJokeText = "Chuck Norris's brain waves are suspected to be harmful to cell phones."
+
+
         clickBottomTab(R.string.favorites)
         checkTitle(R.string.favorites)
 
@@ -83,8 +87,7 @@ class MainActivityTest {
         clickBottomTab(R.string.random)
 
         waitFor {
-            onView(withId(R.id.randomJoke))
-                .check(matches(withText("Chuck Norris's brain waves are suspected to be harmful to cell phones.")))
+            onView(withId(R.id.randomJoke)).check(matches(withText(favoriteJokeText)))
         }
 
         onView(withId(R.id.addToFavorites)).perform(click())
@@ -93,8 +96,15 @@ class MainActivityTest {
 
         clickBottomTab(R.string.favorites)
 
-        onView(withText("Chuck Norris's brain waves are suspected to be harmful to cell phones."))
-            .check(matches(isDisplayed()))
+        onView(withText(favoriteJokeText)).check(matches(isDisplayed()))
+        onView(withText(favoriteJokeText)).perform(swipeRight())
+        onView(withText(favoriteJokeText)).check(matches(not(isDisplayed())))
+        onView(withText(R.string.nothing_in_favorites)).check(matches(isDisplayed()))
+
+        clickBottomTab(R.string.categories)
+        clickBottomTab(R.string.favorites)
+
+        onView(withText(R.string.nothing_in_favorites)).check(matches(isDisplayed()))
     }
 
     private fun testCategories() {

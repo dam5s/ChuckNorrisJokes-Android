@@ -9,21 +9,15 @@ import android.widget.TextView
 import io.damo.chucknorrisjokes.R
 import io.damo.chucknorrisjokes.icndb.Joke
 
-class FavoritesAdapter(context: Context) : RecyclerView.Adapter<FavoritesAdapter.ViewHolder>() {
+class FavoritesAdapter(val jokes: List<Joke>, context: Context) : RecyclerView.Adapter<FavoritesAdapter.ViewHolder>() {
 
     private val layoutInflater = LayoutInflater.from(context)
 
-    var favoriteJokes: List<Joke> = emptyList()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
 
-
-    override fun getItemCount() = favoriteJokes.size
+    override fun getItemCount() = jokes.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.joke.text = favoriteJokes[position].text
+        holder.joke.text = jokes[position].text
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {

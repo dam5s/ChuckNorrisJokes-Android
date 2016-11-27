@@ -8,7 +8,7 @@
     </style>
 
     <style name="JokeCard">
-        <item name="android:background">@color/card_bg</item>
+        <item name="android:background">@color/cardBg</item>
         <item name="android:layout_marginLeft">@dimen/spacing</item>
         <item name="android:layout_marginRight">@dimen/spacing</item>
         <item name="android:layout_marginTop">@dimen/half_spacing</item>

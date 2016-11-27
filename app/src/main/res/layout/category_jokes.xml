@@ -11,34 +11,25 @@
         android:orientation="vertical">
 
 
-        <android.support.v7.widget.CardView
-            style="@style/JokeCard"
-            >
+        <android.support.v7.widget.CardView style="@style/JokeCard">
 
             <TextView
                 android:id="@+id/joke1"
-                style="@style/JokeCardText"
-                />
+                style="@style/JokeCardText"/>
         </android.support.v7.widget.CardView>
 
-        <android.support.v7.widget.CardView
-            style="@style/JokeCard"
-            >
+        <android.support.v7.widget.CardView style="@style/JokeCard">
 
             <TextView
                 android:id="@+id/joke2"
-                style="@style/JokeCardText"
-                />
+                style="@style/JokeCardText"/>
         </android.support.v7.widget.CardView>
 
-        <android.support.v7.widget.CardView
-            style="@style/JokeCard"
-            >
+        <android.support.v7.widget.CardView style="@style/JokeCard">
 
             <TextView
                 android:id="@+id/joke3"
-                style="@style/JokeCardText"
-                />
+                style="@style/JokeCardText"/>
         </android.support.v7.widget.CardView>
     </LinearLayout>
 </ScrollView>

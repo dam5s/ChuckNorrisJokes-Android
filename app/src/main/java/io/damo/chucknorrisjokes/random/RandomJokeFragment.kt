@@ -11,6 +11,7 @@ import io.damo.chucknorrisjokes.favorites.Favorites
 import io.damo.chucknorrisjokes.icndb.IcndbApi
 import io.damo.chucknorrisjokes.icndb.Joke
 import io.damo.chucknorrisjokes.serviceLocator
+import io.damo.chucknorrisjokes.utils.highlightName
 import io.damo.chucknorrisjokes.utils.observe
 import io.damo.chucknorrisjokes.utils.setVisibleIf
 import io.damo.chucknorrisjokes.utils.toast
@@ -65,7 +66,7 @@ class RandomJokeFragment : Fragment() {
                 result
                     .then {
                         joke = it
-                        randomJoke.text = joke!!.text
+                        randomJoke.text = context.highlightName(joke!!.text)
                         addToFavorites.setVisibleIf(favorites.canAdd(joke!!))
                     }
                     .otherwise {

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import io.damo.chucknorrisjokes.R
 import io.damo.chucknorrisjokes.icndb.Joke
 import io.damo.chucknorrisjokes.serviceLocator
+import io.damo.chucknorrisjokes.utils.highlightName
 import io.damo.chucknorrisjokes.utils.observe
 import kotlinx.android.synthetic.main.category_jokes.*
 import rx.Subscription
@@ -59,9 +60,9 @@ class CategoryJokesFragment : Fragment() {
 
     private fun displayJokes() {
         if (jokes.size == 3) {
-            joke1.text = jokes[0].text
-            joke2.text = jokes[1].text
-            joke3.text = jokes[2].text
+            joke1.text = context.highlightName(jokes[0].text)
+            joke2.text = context.highlightName(jokes[1].text)
+            joke3.text = context.highlightName(jokes[2].text)
         }
     }
 }

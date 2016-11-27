@@ -8,8 +8,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import io.damo.chucknorrisjokes.R
 import io.damo.chucknorrisjokes.icndb.Joke
+import io.damo.chucknorrisjokes.utils.highlightName
 
-class FavoritesAdapter(val jokes: List<Joke>, context: Context) : RecyclerView.Adapter<FavoritesAdapter.ViewHolder>() {
+class FavoritesAdapter(val jokes: List<Joke>, val context: Context) : RecyclerView.Adapter<FavoritesAdapter.ViewHolder>() {
 
     private val layoutInflater = LayoutInflater.from(context)
 
@@ -17,7 +18,7 @@ class FavoritesAdapter(val jokes: List<Joke>, context: Context) : RecyclerView.A
     override fun getItemCount() = jokes.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.joke.text = jokes[position].text
+        holder.joke.text = context.highlightName(jokes[position].text)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {

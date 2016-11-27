@@ -16,6 +16,7 @@ import android.widget.Toast
 import io.damo.chucknorrisjokes.R
 
 
+@Suppress("DEPRECATION")
 fun Context.color(@ColorRes colorId: Int): Int {
     if (Build.VERSION.SDK_INT >= 23)
         return getColor(colorId)

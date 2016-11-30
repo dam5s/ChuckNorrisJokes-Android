@@ -8,4 +8,5 @@
     <string name="nothing_in_favorites">Nothing in Favorites</string>
     <string name="removed_from_favorites">Removed from Favorites</string>
     <string name="undo">Undo</string>
+    <string name="add_to_favorites">Add to favorites</string>
 </resources>

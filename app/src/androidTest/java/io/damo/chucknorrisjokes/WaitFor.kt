@@ -3,7 +3,7 @@ package io.damo.chucknorrisjokes
 import org.junit.Assert
 import java.util.*
 
-fun waitFor(assertion: () -> Unit) {
+fun waitFor(atMost: Int = 2.seconds, assertion: () -> Unit) {
     val start = Date().time
     var failing = true
 
@@ -14,7 +14,7 @@ fun waitFor(assertion: () -> Unit) {
         } catch (e: AssertionError) {
             val now = Date().time
 
-            if (now - start > 2000) {
+            if (now - start > atMost) {
                 Assert.fail("Timed out waiting for assertion")
             }
 
@@ -22,3 +22,6 @@ fun waitFor(assertion: () -> Unit) {
         }
     }
 }
+
+val Int.seconds: Int
+    get() = this * 1000

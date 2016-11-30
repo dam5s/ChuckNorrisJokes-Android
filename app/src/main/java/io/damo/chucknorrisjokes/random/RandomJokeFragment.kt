@@ -1,6 +1,10 @@
 package io.damo.chucknorrisjokes.random
 
+import android.content.res.ColorStateList
+import android.graphics.PorterDuff.Mode.MULTIPLY
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,9 +14,7 @@ import io.damo.chucknorrisjokes.favorites.Favorites
 import io.damo.chucknorrisjokes.icndb.IcndbApi
 import io.damo.chucknorrisjokes.icndb.Joke
 import io.damo.chucknorrisjokes.serviceLocator
-import io.damo.chucknorrisjokes.utils.highlightName
-import io.damo.chucknorrisjokes.utils.observe
-import io.damo.chucknorrisjokes.utils.toast
+import io.damo.chucknorrisjokes.utils.*
 import kotlinx.android.synthetic.main.random_joke.*
 import rx.Subscription
 
@@ -37,12 +39,14 @@ class RandomJokeFragment : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         swipeToRefresh.setOnRefreshListener { loadJoke() }
 
-        addToFavorites.setOnClickListener {
-            joke?.let {
-                favorites.add(it).then {
-                    addToFavorites.hide()
-                }
-            }
+        addToFavorites.apply {
+            setColors(R.color.windowBg, R.color.text)
+            setOnClickListener { joke?.addToFavorites() }
+        }
+
+        removeFromFavorites.apply {
+            setColors(R.color.windowBg, R.color.accent)
+            setOnClickListener { joke?.removeFromFavorites() }
         }
     }
 
@@ -56,6 +60,31 @@ class RandomJokeFragment : Fragment() {
         super.onPause()
     }
 
+
+    private fun Joke.addToFavorites() = favorites
+        .add(this)
+        .then { displayFavoriteButtons() }
+
+    private fun Joke.removeFromFavorites() {
+        favorites.remove(this)
+        displayFavoriteButtons()
+    }
+
+    private fun FloatingActionButton.setColors(backgroundColorId: Int, iconColorId: Int) {
+        val updatedDrawable = drawable.copyWithTint(color(iconColorId))
+
+        backgroundTintList = ColorStateList.valueOf(color(backgroundColorId))
+        setImageDrawable(updatedDrawable)
+    }
+
+    private fun Drawable.copyWithTint(color: Int)
+        = constantState
+        .newDrawable()
+        .mutate()
+        .apply {
+            setColorFilter(color, MULTIPLY)
+        }
+
     private fun loadJoke() {
         subscription?.unsubscribe()
 
@@ -64,18 +93,17 @@ class RandomJokeFragment : Fragment() {
                 result
                     .then {
                         joke = it
-                        randomJoke.text = context.highlightName(joke!!.text)
-
-                        if (favorites.canAdd(joke!!)) {
-                            addToFavorites.show()
-                        } else {
-                            addToFavorites.hide()
-                        }
+                        randomJoke.text = highlightName(joke!!.text)
+                        displayFavoriteButtons()
                     }
-                    .otherwise {
-                        context.toast(it)
-                    }
+                    .otherwise { toast(it) }
                     .always { swipeToRefresh.isRefreshing = false }
             }
+    }
+
+    private fun displayFavoriteButtons() {
+        val canAdd = favorites.canAdd(joke!!)
+        addToFavorites.setVisibleIf(canAdd)
+        removeFromFavorites.setVisibleIf(!canAdd)
     }
 }

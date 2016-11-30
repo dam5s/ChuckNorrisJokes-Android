@@ -76,6 +76,33 @@ class FavoritesTest {
 
         assertThat(favorites.all(), equalTo(emptyList()))
     }
+
+    @Test
+    fun testSubscribe_Unsubscribe() {
+        val observer = TestObserver()
+        favorites.subscribe(observer)
+
+        favorites.add(Joke(1, "Hi"))
+        assertThat(observer.didReceiveNotification, equalTo(true))
+
+        observer.didReceiveNotification = false
+        favorites.remove(Joke(1, "Hi"))
+        assertThat(observer.didReceiveNotification, equalTo(true))
+
+        observer.didReceiveNotification = false
+        favorites.unsubscribe(observer)
+        favorites.add(Joke(2, "Bye"))
+        assertThat(observer.didReceiveNotification, equalTo(false))
+    }
+}
+
+class TestObserver : Favorites.Observer {
+
+    var didReceiveNotification = false
+
+    override fun onFavoritesChanged() {
+        didReceiveNotification = true
+    }
 }
 
 class FakeFileStorage : FileStorage {

@@ -10,6 +10,8 @@
     <color name="text">#999</color>
     <color name="highlightedText">#444</color>
 
+    <color name="border">#3999</color>
+
     <color name="windowBg">#eee</color>
     <color name="cardBg">#fff</color>
 </resources>

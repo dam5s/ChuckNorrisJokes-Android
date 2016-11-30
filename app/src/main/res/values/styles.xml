@@ -25,4 +25,30 @@
         <item name="android:fontFamily">serif</item>
         <item name="android:textSize">16sp</item>
     </style>
+
+    <style name="FavoriteIcon">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">4dp</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="FavoriteIcon.Add">
+        <item name="android:src">@drawable/ic_favorite_border_white_24dp</item>
+        <item name="android:contentDescription">@string/add_to_favorites</item>
+    </style>
+
+    <style name="FavoriteIcon.Remove">
+        <item name="android:src">@drawable/ic_favorite_white_24dp</item>
+        <item name="android:contentDescription">@string/removed_from_favorites</item>
+    </style>
+
+    <style name="FavoriteActionButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_margin">@dimen/spacing</item>
+        <item name="android:visibility">gone</item>
+        <item name="android:background">@color/windowBg</item>
+    </style>
 </resources>

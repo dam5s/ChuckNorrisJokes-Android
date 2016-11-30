@@ -86,8 +86,7 @@ class MainActivityTest {
         clickBottomTab(R.string.favorites)
         checkTitle(R.string.favorites)
 
-        onView(withText(R.string.nothing_in_favorites))
-            .check(matches(isDisplayed()))
+        checkNothingInFavorites()
 
         // add random joke to favorites
         clickBottomTab(R.string.random)
@@ -100,16 +99,22 @@ class MainActivityTest {
             .perform(click())
             .check(matches(not(isDisplayed())))
 
+        onView(withId(R.id.removeFromFavorites))
+            .perform(click())
+            .check(matches(not(isDisplayed())))
+
+        onView(withId(R.id.addToFavorites))
+            .perform(click())
+            .check(matches(not(isDisplayed())))
+
         // check we have the favorite then remove it
         clickBottomTab(R.string.favorites)
 
         onView(withText(favoriteJokeText))
             .check(matches(isDisplayed()))
             .perform(swipeRight())
-            .check(matches(not(isDisplayed())))
 
-        onView(withText(R.string.nothing_in_favorites))
-            .check(matches(isDisplayed()))
+        checkNothingInFavorites()
 
 
         // undo, check and remove again
@@ -128,16 +133,65 @@ class MainActivityTest {
             .perform(swipeRight())
             .check(matches(not(isDisplayed())))
 
-        onView(withText(R.string.nothing_in_favorites))
-            .check(matches(isDisplayed()))
+        checkNothingInFavorites()
 
 
         // check it's persisted
         clickBottomTab(R.string.categories)
         clickBottomTab(R.string.favorites)
 
-        onView(withText(R.string.nothing_in_favorites)).check(matches(isDisplayed()))
+        checkNothingInFavorites()
+
+        // add to favorites from categories tab
+
+        clickBottomTab(R.string.categories)
+
+        onView(allOf(
+            isDescendantOfA(withId(R.id.joke1)), isDisplayed(),
+            withId(R.id.add)
+        )).perform(click())
+
+        // check it's persisted
+        clickBottomTab(R.string.favorites)
+
+        onView(withText("Chuck Norris doesn't actually write books, the words assemble themselves out of fear."))
+            .check(matches(isDisplayed()))
+
+        // remove it from categories tab add another one
+        clickBottomTab(R.string.categories)
+
+        onView(allOf(
+            isDescendantOfA(withId(R.id.joke1)), isDisplayed(),
+            withId(R.id.remove)
+        )).perform(click())
+
+        onView(allOf(
+            isDescendantOfA(withId(R.id.joke2)), isDisplayed(),
+            withId(R.id.add)
+        )).perform(click())
+
+        // check it's persisted
+        clickBottomTab(R.string.favorites)
+
+        onView(withText("Count from one to ten. That's how long it would take Chuck Norris to kill you...Fourty seven times."))
+            .check(matches(isDisplayed()))
+            .perform(swipeRight())
+
+        checkNothingInFavorites()
+
+        // check it's reflected from categories fragment
+        clickBottomTab(R.string.categories)
+
+        onView(allOf(
+            isDescendantOfA(withId(R.id.joke2)), isDisplayed(),
+            withId(R.id.add)
+        )).check(matches(isDisplayed()))
     }
+
+
+    private fun checkNothingInFavorites()
+        = onView(withText(R.string.nothing_in_favorites)).check(matches(isDisplayed()))
+
 
     private fun testCategories() {
         clickBottomTab(R.string.categories)
@@ -149,34 +203,32 @@ class MainActivityTest {
             checkTopTabWithTitle("explicit")
         }
 
-        onView(allOf(withId(R.id.joke1), isDisplayed()))
-            .check(matches(withText("Chuck Norris doesn't actually write books, the words assemble themselves out of fear.")))
-        onView(allOf(withId(R.id.joke2), isDisplayed()))
-            .check(matches(withText("Count from one to ten. That's how long it would take Chuck Norris to kill you...Fourty seven times.")))
-        onView(allOf(withId(R.id.joke3), isDisplayed()))
-            .check(matches(withText("Chuck Norris played Russian Roulette with a fully loaded gun and won.")))
+        checkJokeText(R.id.joke1, "Chuck Norris doesn't actually write books, the words assemble themselves out of fear.")
+        checkJokeText(R.id.joke2, "Count from one to ten. That's how long it would take Chuck Norris to kill you...Fourty seven times.")
+        checkJokeText(R.id.joke3, "Chuck Norris played Russian Roulette with a fully loaded gun and won.")
 
         clickTopTab("explicit")
 
-        onView(allOf(withId(R.id.joke1), isDisplayed()))
-            .check(matches(withText("Chuck Norris lost his virginity before his dad did.")))
-        onView(allOf(withId(R.id.joke2), isDisplayed()))
-            .check(matches(withText("Chuck Norris once ate three 72 oz. steaks in one hour. He spent the first 45 minutes having sex with his waitress.")))
-        onView(allOf(withId(R.id.joke3), isDisplayed()))
-            .check(matches(withText("One day Chuck Norris walked down the street with a massive erection. There were no survivors.")))
+        checkJokeText(R.id.joke1, "Chuck Norris lost his virginity before his dad did.")
+        checkJokeText(R.id.joke2, "Chuck Norris once ate three 72 oz. steaks in one hour. He spent the first 45 minutes having sex with his waitress.")
+        checkJokeText(R.id.joke3, "One day Chuck Norris walked down the street with a massive erection. There were no survivors.")
 
         clickTopTab("nerdy")
 
-        onView(allOf(withId(R.id.joke1), isDisplayed()))
-            .check(matches(withText("Chuck Norris can access private methods.")))
-        onView(allOf(withId(R.id.joke2), isDisplayed()))
-            .check(matches(withText("Chuck Norris causes the Windows Blue Screen of Death.")))
-        onView(allOf(withId(R.id.joke3), isDisplayed()))
-            .check(matches(withText("Project managers never ask Chuck Norris for estimations... ever.")))
+        checkJokeText(R.id.joke1, "Chuck Norris can access private methods.")
+        checkJokeText(R.id.joke2, "Chuck Norris causes the Windows Blue Screen of Death.")
+        checkJokeText(R.id.joke3, "Project managers never ask Chuck Norris for estimations... ever.")
 
         clickTopTab("none")
     }
 
+    private fun checkJokeText(id: Int, text: String)
+        = onView(allOf(
+        isDescendantOfA(withId(id)),
+        withId(R.id.text),
+        isDisplayed()
+    ))
+        .check(matches(withText(text)))
 
     private fun clickTopTab(title: String)
         = onTopTab(title).perform(click())
@@ -186,9 +238,9 @@ class MainActivityTest {
 
     private fun onTopTab(title: String)
         = onView(allOf(
-            withText(title),
-            isDescendantOfA(isAssignableFrom(TabLayout::class.java))
-        ))
+        withText(title),
+        isDescendantOfA(isAssignableFrom(TabLayout::class.java))
+    ))
 
     private fun clickBottomTab(@StringRes resId: Int) {
         onView(allOf(

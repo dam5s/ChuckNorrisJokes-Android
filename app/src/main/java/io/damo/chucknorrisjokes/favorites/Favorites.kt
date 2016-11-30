@@ -34,7 +34,7 @@ class Favorites(val fileStorage: FileStorage) {
         jokes.add(joke)
         jokes.sortBy(Joke::id)
 
-        persist()
+        notifyAndPersist()
 
         return Success(jokes.indexOf(joke))
     }
@@ -44,12 +44,29 @@ class Favorites(val fileStorage: FileStorage) {
 
     private val mapper = ObjectMapper().apply { registerKotlinModule() }
 
-    private fun persist() {
+    private fun notifyAndPersist() {
+        observers.forEach { it.onFavoritesChanged() }
         fileStorage.save("favorites.json", mapper.writeValueAsString(jokes))
     }
 
     fun remove(joke: Joke) {
         jokes.remove(joke)
-        persist()
+        notifyAndPersist()
+    }
+
+
+    private val observers = mutableListOf<Observer>()
+
+    fun subscribe(observer: Observer) {
+        observers.add(observer)
+    }
+
+    fun unsubscribe(observer: Observer) {
+        observers.remove(observer)
+    }
+
+    interface Observer {
+        fun onFavoritesChanged()
     }
 }
+

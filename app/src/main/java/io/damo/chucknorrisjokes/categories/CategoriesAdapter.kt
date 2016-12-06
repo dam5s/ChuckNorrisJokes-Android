@@ -1,12 +1,10 @@
 package io.damo.chucknorrisjokes.categories
 
-import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
-import android.view.ViewGroup
 import io.damo.chucknorrisjokes.icndb.Category
+import io.damo.chucknorrisjokes.utils.InsuredParentViewFragmentPagerAdapter
 
-class CategoriesAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
+class CategoriesAdapter(fragmentManager: FragmentManager) : InsuredParentViewFragmentPagerAdapter(fragmentManager) {
 
     var categories: List<Category> = emptyList()
         set(categories) {
@@ -23,24 +21,4 @@ class CategoriesAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter
 
     override fun getPageTitle(position: Int)
         = categories[position].name
-
-
-    /*
-     * Fix an issue with FragmentPagerAdapter:
-     *
-     * When using the adapter with a different ViewPager (same id),
-     * It does not ensure the fragment's view is in the new ViewPager.
-     */
-    override fun instantiateItem(container: ViewGroup, position: Int): Any {
-        val fragment = super.instantiateItem(container, position) as Fragment
-
-        fragment.view?.let { view ->
-            if (view.parent != container) {
-                (view.parent as? ViewGroup)?.removeView(view)
-                container.addView(view)
-            }
-        }
-
-        return fragment
-    }
 }

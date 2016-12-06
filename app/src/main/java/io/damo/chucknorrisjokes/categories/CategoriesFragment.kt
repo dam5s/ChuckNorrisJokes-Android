@@ -45,8 +45,8 @@ class CategoriesFragment : Fragment() {
 
     private fun setupTabs() {
         if (adapter.categories.isNotEmpty()) {
-            viewPager.adapter = adapter
-            tabLayout.setupWithViewPager(viewPager)
+            categoriesViewPager.adapter = adapter
+            tabLayout.setupWithViewPager(categoriesViewPager)
         }
     }
 

@@ -8,7 +8,7 @@ class FakeIcndb : Dispatcher() {
 
     override fun dispatch(request: RecordedRequest): MockResponse {
         when (request.path) {
-            "/jokes/random?exclude=[explicit]&escape=javascript" -> return randomJokes.removeAt(0)
+            "/jokes/random/5?exclude=[explicit]&escape=javascript" -> return randomJokes.removeAt(0)
             "/jokes/random/3?limitTo=[nerdy]&escape=javascript" -> return nerdyJokes
             "/jokes/random/3?limitTo=[explicit]&escape=javascript" -> return explicitJokes
             "/jokes/random/3?exclude=[nerdy,explicit]&escape=javascript" -> return jokesWithoutCategory
@@ -24,36 +24,25 @@ class FakeIcndb : Dispatcher() {
     //language=JSON
     val randomJokes = mutableListOf(
         response("""
-            { "type": "success",
-              "value": {
-                "id": 502,
-                "joke": "Chuck Norris insists on strongly-typed programming languages.",
-                "categories": ["nerdy"]
-            } }
+            { "type": "success", "value": [
+                { "id": 92, "joke": "Chuck Norris invented black. In fact, he invented the entire spectrum of visible light. Except pink. Tom Cruise invented pink.", "categories": [] },
+                { "id": 255, "joke": "Chuck Norris does not have to answer the phone. His beard picks up the incoming electrical impulses and translates them into audible sound.", "categories": [] },
+                { "id": 194, "joke": "The US did not boycott the 1980 Summer Olympics in Moscow due to political reasons: Chuck Norris killed the entire US team with a single round-house kick during TaeKwonDo practice.", "categories": [] }
+            ] }
         """),
         response("""
-            { "type": "success",
-              "value": {
-                "id": 545,
-                "joke": "Chuck Norris's brain waves are suspected to be harmful to cell phones.",
-                "categories": []
-            } }
+            { "type": "success", "value": [
+                { "id": 217, "joke": "Crime does not pay - unless you are an undertaker following Walker, Texas Ranger, on a routine patrol.", "categories": [] },
+                { "id": 215, "joke": "Chuck Norris just says \"no\" to drugs. If he said \"yes\", it would collapse Colombia's infrastructure.", "categories": [] },
+                { "id": 73, "joke": "Chuck Norris doesn't actually write books, the words assemble themselves out of fear.", "categories": [] }
+            ] }
         """),
         response("""
-            { "type": "success",
-              "value": {
-                "id": 178,
-                "joke": "In an act of great philanthropy, Chuck made a generous donation to the American Cancer Society. He donated 6,000 dead bodies for scientific research.",
-                "categories": []
-            } }
-        """),
-        response("""
-            { "type": "success",
-              "value": {
-                "id": 157,
-                "joke": "A study showed the leading causes of death in the United States are: 1. Heart disease, 2. Chuck Norris, 3. Cancer",
-                "categories": []
-            } }
+            { "type": "success", "value": [
+                { "id": 34, "joke": "The opening scene of the movie \"Saving Private Ryan\" is loosely based on games of dodgeball Chuck Norris played in second grade.", "categories": [] },
+                { "id": 407, "joke": "Chuck Norris originally wrote the first dictionary. The definition for each word is as follows - A swift roundhouse kick to the face.", "categories": [] },
+                { "id": 367, "joke": "Not everyone that Chuck Norris is mad at gets killed. Some get away. They are called astronauts.", "categories": [] }
+            ] }
         """)
     )
 

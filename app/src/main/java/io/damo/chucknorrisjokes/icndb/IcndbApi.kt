@@ -19,10 +19,10 @@ class IcndbApi(val okHttp: OkHttpClient, val baseApiUrl: String) {
     }
 
 
-    fun fetchRandomJoke(): Result<Joke> = tryFetching("random joke") {
-        val response = fetchJson("jokes/random?exclude=[explicit]&escape=javascript", SingleJokeResponse::class)
+    fun fetchRandomJokes(): Result<List<Joke>> = tryFetching("random jokes") {
+        val response = fetchJson("jokes/random/5?exclude=[explicit]&escape=javascript", JokeListResponse::class)
 
-        Success(response.mapJoke())
+        Success(response.mapJokes())
     }
 
     fun fetchCategories(): Result<List<Category>> = tryFetching("categories") {

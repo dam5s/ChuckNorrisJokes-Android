@@ -1,3 +1,5 @@
 package io.damo.chucknorrisjokes.icndb
 
-data class Joke(val id: Int, val text: String)
+import java.io.Serializable
+
+data class Joke(val id: Int, val text: String) : Serializable

@@ -22,7 +22,7 @@ class FavoritesAdapter(val jokes: List<Joke>, val context: Context) : RecyclerVi
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
-        val view = layoutInflater.inflate(R.layout.joke, parent, false)
+        val view = layoutInflater.inflate(R.layout.favorite_joke, parent, false)
         return ViewHolder(view)
     }
 

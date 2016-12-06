@@ -6,7 +6,7 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import io.damo.chucknorrisjokes.categories.CategoriesFragment
 import io.damo.chucknorrisjokes.favorites.FavoritesFragment
-import io.damo.chucknorrisjokes.random.RandomJokeFragment
+import io.damo.chucknorrisjokes.random.RandomJokesFragment
 import kotlinx.android.synthetic.main.main.*
 
 class MainActivity : AppCompatActivity() {
@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.main)
 
-        randomJokeFragment = RandomJokeFragment()
+        randomJokeFragment = RandomJokesFragment()
         categoriesFragment = CategoriesFragment()
         favoritesFragment = FavoritesFragment()
 
@@ -60,11 +60,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun navigateToFavorites() = navigateTo(favoritesFragment, R.string.favorites)
 
-    private fun navigateTo(fragment: Fragment, @StringRes resId: Int) {
+    private fun navigateTo(fragment: Fragment, @StringRes titleResId: Int) {
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.fragment, fragment)
             .commit()
-        setTitle(resId)
+        setTitle(titleResId)
     }
 }
